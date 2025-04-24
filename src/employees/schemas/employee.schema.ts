@@ -3,7 +3,15 @@ import { Document, Schema as MongooseSchema } from "mongoose";
 
 export type EmployeeDocument = Employee & Document;
 
-@Schema({ timestamps: true })
+@Schema({
+  timestamps: true,
+  toJSON: {
+    transform: (_, ret) => {
+      delete ret.__v;
+      return ret;
+    },
+  },
+})
 export class Employee {
   @Prop({ required: true })
   name: string;

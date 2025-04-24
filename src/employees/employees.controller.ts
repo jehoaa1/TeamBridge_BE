@@ -22,6 +22,7 @@ import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
 import { Employee } from "./schemas/employee.schema";
 import { FindEmployeesDto } from "./dto/find-employees.dto";
 import { EmployeesResponseDto } from "./dto/employees-response.dto";
+import { UpdateEmployeeDto } from "./dto/update-employee.dto";
 
 @ApiTags("employees")
 @ApiBearerAuth()
@@ -45,7 +46,7 @@ export class EmployeesController {
     @Body() createEmployeeDto: CreateEmployeeDto,
     @Request() req
   ): Promise<Employee> {
-    console.log("req::", req.user);
+    console.log("req::", req);
     return this.employeesService.create(createEmployeeDto, req.user);
   }
 
@@ -81,26 +82,114 @@ export class EmployeesController {
   }
 
   @Get(":id")
-  @ApiOperation({ summary: "Get employee by id" })
-  @ApiResponse({ status: 200, description: "Return employee by id" })
-  findOne(@Param("id") id: string) {
+  @ApiOperation({ summary: "직원 상세 정보 조회" })
+  @ApiResponse({
+    status: 200,
+    description: "직원 상세 정보 조회 성공",
+    schema: {
+      example: {
+        statusCode: 200,
+        message: "Success",
+        data: {
+          id: "1",
+          name: "홍길동",
+          age: 30,
+          salary: 50000000,
+          hireDate: "2024-04-24T00:00:00.000Z",
+          address: "서울시 강남구",
+          emergencyContact: "010-1234-5678",
+          remainingLeave: 15,
+          createdAt: "2024-04-24T00:00:00.000Z",
+          updatedAt: "2024-04-24T00:00:00.000Z",
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: "직원을 찾을 수 없음",
+    schema: {
+      example: {
+        statusCode: 404,
+        message: "해당 ID의 직원을 찾을 수 없습니다.",
+        data: null,
+      },
+    },
+  })
+  async findOne(@Param("id") id: string) {
     return this.employeesService.findOne(id);
   }
 
   @Put(":id")
-  @ApiOperation({ summary: "Update employee by id" })
-  @ApiResponse({ status: 200, description: "Employee updated successfully" })
-  update(
+  @ApiOperation({ summary: "직원 정보 수정" })
+  @ApiResponse({
+    status: 200,
+    description: "직원 정보 수정 성공",
+    schema: {
+      example: {
+        statusCode: 200,
+        message: "Success",
+        data: {
+          id: "1",
+          name: "홍길동",
+          age: 31,
+          salary: 55000000,
+          hireDate: "2024-04-24T00:00:00.000Z",
+          address: "서울시 강남구",
+          emergencyContact: "010-1234-5678",
+          remainingLeave: 15,
+          createdAt: "2024-04-24T00:00:00.000Z",
+          updatedAt: "2024-04-24T00:00:00.000Z",
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: "직원을 찾을 수 없음",
+    schema: {
+      example: {
+        statusCode: 404,
+        message: "해당 ID의 직원을 찾을 수 없습니다.",
+        data: null,
+      },
+    },
+  })
+  async update(
     @Param("id") id: string,
-    @Body() updateEmployeeDto: CreateEmployeeDto
+    @Body() updateEmployeeDto: UpdateEmployeeDto
   ) {
     return this.employeesService.update(id, updateEmployeeDto);
   }
 
   @Delete(":id")
-  @ApiOperation({ summary: "Delete employee by id" })
-  @ApiResponse({ status: 200, description: "Employee deleted successfully" })
-  remove(@Param("id") id: string) {
+  @ApiOperation({ summary: "직원 삭제" })
+  @ApiResponse({
+    status: 200,
+    description: "직원 삭제 성공",
+    schema: {
+      example: {
+        statusCode: 200,
+        message: "Success",
+        data: {
+          id: "1",
+          name: "홍길동",
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: "직원을 찾을 수 없음",
+    schema: {
+      example: {
+        statusCode: 404,
+        message: "해당 ID의 직원을 찾을 수 없습니다.",
+        data: null,
+      },
+    },
+  })
+  async remove(@Param("id") id: string) {
     return this.employeesService.remove(id);
   }
 }

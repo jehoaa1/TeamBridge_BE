@@ -14,7 +14,7 @@ export class User {
   @Prop({ required: true })
   password: string;
 
-  // MongoDB의 _id를 id로 변환하기 위한 가상 필드
+  // 가상 필드
   userId: string;
 
   createdAt: Date;
@@ -22,8 +22,8 @@ export class User {
 
 const UserSchema = SchemaFactory.createForClass(User);
 
-// _id를 id로 변환하는 가상 필드 설정
-UserSchema.virtual("id").get(function () {
+// 가상 필드 설정
+UserSchema.virtual("userId").get(function () {
   return this._id.toHexString();
 });
 

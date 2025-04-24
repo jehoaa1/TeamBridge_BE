@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Employee, EmployeeDocument } from "./schemas/employee.schema";
@@ -6,6 +6,7 @@ import { CreateEmployeeDto } from "./dto/create-employee.dto";
 import { User } from "../users/schemas/user.schema";
 import { FindEmployeesDto } from "./dto/find-employees.dto";
 import { EmployeesResponseDto } from "./dto/employees-response.dto";
+import { UpdateEmployeeDto } from "./dto/update-employee.dto";
 
 @Injectable()
 export class EmployeesService {
@@ -15,11 +16,12 @@ export class EmployeesService {
 
   async create(
     createEmployeeDto: CreateEmployeeDto,
-    user: User
+    user: any
   ): Promise<Employee> {
+    console.log("Creating employee with user:", user); // 디버깅용
     const createdEmployee = new this.employeeModel({
       ...createEmployeeDto,
-      createdBy: user.userId,
+      createdBy: user.userId, // JWT 전략에서 반환한 userId 사용
     });
     return createdEmployee.save();
   }
@@ -62,19 +64,35 @@ export class EmployeesService {
   }
 
   async findOne(id: string): Promise<Employee> {
-    return this.employeeModel.findById(id).exec();
+    const employee = await this.employeeModel.findById(id).exec();
+    if (!employee) {
+      throw new NotFoundException("해당 ID의 직원을 찾을 수 없습니다.");
+    }
+    return employee;
   }
 
   async update(
     id: string,
-    updateEmployeeDto: CreateEmployeeDto
+    updateEmployeeDto: UpdateEmployeeDto
   ): Promise<Employee> {
-    return this.employeeModel
+    const updatedEmployee = await this.employeeModel
       .findByIdAndUpdate(id, updateEmployeeDto, { new: true })
       .exec();
+
+    if (!updatedEmployee) {
+      throw new NotFoundException("해당 ID의 직원을 찾을 수 없습니다.");
+    }
+    return updatedEmployee;
   }
 
   async remove(id: string): Promise<Employee> {
-    return this.employeeModel.findByIdAndDelete(id).exec();
+    const deletedEmployee = await this.employeeModel
+      .findByIdAndDelete(id)
+      .exec();
+
+    if (!deletedEmployee) {
+      throw new NotFoundException("해당 ID의 직원을 찾을 수 없습니다.");
+    }
+    return deletedEmployee;
   }
 }
