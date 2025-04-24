@@ -15,7 +15,7 @@ export class User {
   password: string;
 
   // MongoDB의 _id를 id로 변환하기 위한 가상 필드
-  id: string;
+  userId: string;
 
   createdAt: Date;
 }

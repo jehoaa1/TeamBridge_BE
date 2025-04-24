@@ -29,12 +29,12 @@ export class AuthService {
       throw new UnauthorizedException("이메일 또는 비밀번호가 잘못되었습니다.");
     }
 
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.userId, email: user.email };
 
     return {
       access_token: await this.jwtService.signAsync(payload),
       user: {
-        id: user.id,
+        id: user.userId,
         email: user.email,
         name: user.name,
         createdAt: user.createdAt,
@@ -51,7 +51,7 @@ export class AuthService {
     });
 
     return {
-      id: user.id,
+      id: user.userId,
       email: user.email,
       name: user.name,
       createdAt: user.createdAt,

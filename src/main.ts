@@ -28,7 +28,15 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("docs", app, document);
+  SwaggerModule.setup("docs", app, document, {
+    swaggerOptions: {
+      tagsSorter: "alpha", // 태그 정렬
+      filter: true, // UI에서 필터링 가능
+      displayRequestDuration: true,
+      persistAuthorization: true,
+      cacheControl: false, // 캐시 방지
+    },
+  });
 
   await app.listen(3000);
 }
