@@ -24,6 +24,13 @@ export class Team {
   })
   @Prop()
   description: string;
+
+  @ApiProperty({
+    example: 5,
+    description: "팀 소속 직원 수 (퇴사자 제외)",
+    required: false,
+  })
+  memberCount?: number;
 }
 
 export const TeamSchema = SchemaFactory.createForClass(Team);

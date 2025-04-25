@@ -23,6 +23,10 @@ export class Employee {
   @Prop({ required: true })
   age: number;
 
+  @ApiProperty({ example: "선임 개발자", description: "직책" })
+  @Prop({ required: true })
+  position: string;
+
   @ApiProperty({ example: 50000000, description: "연봉" })
   @Prop({ required: true })
   salary: number;

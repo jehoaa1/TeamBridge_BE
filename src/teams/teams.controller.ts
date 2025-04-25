@@ -79,4 +79,51 @@ export class TeamsController {
   async remove(@Param("id") id: string): Promise<Team> {
     return this.teamsService.remove(id);
   }
+
+  @Get(":id")
+  @RequiredGrade(3)
+  @ApiOperation({ summary: "팀 상세 정보 조회" })
+  @ApiResponse({
+    status: 200,
+    description: "팀 상세 정보 조회 성공",
+    schema: {
+      type: "object",
+      properties: {
+        _id: { type: "string", example: "507f1f77bcf86cd799439011" },
+        name: { type: "string", example: "개발팀" },
+        description: {
+          type: "string",
+          example: "서비스 개발을 담당하는 팀입니다.",
+        },
+        memberCount: { type: "number", example: 5 },
+        members: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              _id: { type: "string", example: "507f1f77bcf86cd799439012" },
+              name: { type: "string", example: "홍길동" },
+              age: { type: "number", example: 30 },
+              position: { type: "string", example: "선임 개발자" },
+              hireDate: {
+                type: "string",
+                format: "date-time",
+                example: "2024-01-01T00:00:00.000Z",
+              },
+              emergencyContact: { type: "string", example: "010-1234-5678" },
+            },
+          },
+        },
+        createdAt: { type: "string", format: "date-time" },
+        updatedAt: { type: "string", format: "date-time" },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: "팀을 찾을 수 없습니다.",
+  })
+  async findOne(@Param("id") id: string): Promise<any> {
+    return this.teamsService.findOne(id);
+  }
 }
