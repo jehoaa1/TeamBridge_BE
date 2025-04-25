@@ -6,28 +6,34 @@ import {
   IsOptional,
   Min,
   MaxLength,
+  IsNotEmpty,
+  IsMongoId,
 } from "class-validator";
 import { Type } from "class-transformer";
 
 export class CreateEmployeeDto {
-  @ApiProperty({ description: "직원 이름" })
+  @ApiProperty({ example: "홍길동", description: "직원 이름" })
   @IsString()
+  @IsNotEmpty()
   @MaxLength(50)
   name: string;
 
-  @ApiProperty({ description: "나이" })
+  @ApiProperty({ example: 30, description: "나이" })
   @IsNumber()
+  @IsNotEmpty()
   @Min(1)
   age: number;
 
-  @ApiProperty({ description: "연봉" })
+  @ApiProperty({ example: 50000000, description: "연봉" })
   @IsNumber()
+  @IsNotEmpty()
   @Min(0)
   salary: number;
 
-  @ApiProperty({ description: "입사일" })
-  @Type(() => Date)
+  @ApiProperty({ example: "2024-01-01", description: "입사일" })
   @IsDate()
+  @Type(() => Date)
+  @IsNotEmpty()
   hireDate: Date;
 
   @ApiPropertyOptional({ description: "퇴사일" })
@@ -36,12 +42,14 @@ export class CreateEmployeeDto {
   @IsDate()
   resignDate?: Date;
 
-  @ApiProperty({ description: "비상연락처" })
+  @ApiProperty({ example: "010-1234-5678", description: "비상 연락처" })
   @IsString()
+  @IsOptional()
   emergencyContact: string;
 
-  @ApiProperty({ description: "집주소" })
+  @ApiProperty({ example: "서울시 강남구", description: "주소" })
   @IsString()
+  @IsOptional()
   address: string;
 
   @ApiProperty({ description: "남은 연차", default: 15 })
@@ -54,4 +62,13 @@ export class CreateEmployeeDto {
   @IsString()
   @MaxLength(500)
   memo?: string;
+
+  @ApiProperty({
+    example: "507f1f77bcf86cd799439011",
+    description: "소속 팀 ID",
+    required: true,
+  })
+  @IsMongoId()
+  @IsNotEmpty()
+  teamId: string;
 }

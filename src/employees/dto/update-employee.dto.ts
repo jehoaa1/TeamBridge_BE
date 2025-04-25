@@ -13,8 +13,7 @@ export class UpdateEmployeeDto {
   @ApiPropertyOptional({ description: "직원 이름" })
   @IsString()
   @MaxLength(50)
-  @IsOptional()
-  name?: string;
+  name: string;
 
   @ApiPropertyOptional({ description: "나이" })
   @IsNumber()
@@ -31,8 +30,7 @@ export class UpdateEmployeeDto {
   @ApiPropertyOptional({ description: "입사일" })
   @Type(() => Date)
   @IsDate()
-  @IsOptional()
-  hireDate?: Date;
+  hireDate: Date;
 
   @ApiPropertyOptional({ description: "퇴사일" })
   @Type(() => Date)
@@ -61,4 +59,9 @@ export class UpdateEmployeeDto {
   @MaxLength(500)
   @IsOptional()
   memo?: string;
+
+  @ApiPropertyOptional({ description: "팀 ID" })
+  @IsString()
+  @IsOptional()
+  teamId: string;
 }

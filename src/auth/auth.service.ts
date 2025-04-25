@@ -30,8 +30,9 @@ export class AuthService {
     }
 
     const payload = {
-      sub: user.userId.toString(), // _id를 문자열로 변환하여 저장
+      sub: user.userId.toString(),
       email: user.email,
+      grade: user.grade,
     };
 
     return {
@@ -40,6 +41,7 @@ export class AuthService {
         id: user.userId.toString(),
         email: user.email,
         name: user.name,
+        grade: user.grade,
         createdAt: user.createdAt,
       },
     };
@@ -57,6 +59,7 @@ export class AuthService {
       id: user.userId,
       email: user.email,
       name: user.name,
+      grade: user.grade,
       createdAt: user.createdAt,
     };
   }

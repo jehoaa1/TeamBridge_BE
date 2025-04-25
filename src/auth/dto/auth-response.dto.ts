@@ -12,6 +12,9 @@ export class UserResponseDto {
 
   @ApiProperty({ example: "2024-04-23T12:00:00.000Z" })
   createdAt: Date;
+
+  @ApiProperty({ example: 5 })
+  grade: number;
 }
 
 export class LoginResponseDto {

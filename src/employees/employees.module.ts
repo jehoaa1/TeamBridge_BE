@@ -4,6 +4,7 @@ import { PassportModule } from "@nestjs/passport";
 import { EmployeesController } from "./employees.controller";
 import { EmployeesService } from "./employees.service";
 import { Employee, EmployeeSchema } from "./schemas/employee.schema";
+import { TeamsModule } from "../teams/teams.module";
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { Employee, EmployeeSchema } from "./schemas/employee.schema";
       { name: Employee.name, schema: EmployeeSchema },
     ]),
     PassportModule.register({ defaultStrategy: "jwt" }),
+    TeamsModule,
   ],
   controllers: [EmployeesController],
   providers: [EmployeesService],

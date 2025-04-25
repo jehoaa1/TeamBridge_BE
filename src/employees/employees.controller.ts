@@ -23,10 +23,12 @@ import { Employee } from "./schemas/employee.schema";
 import { FindEmployeesDto } from "./dto/find-employees.dto";
 import { EmployeesResponseDto } from "./dto/employees-response.dto";
 import { UpdateEmployeeDto } from "./dto/update-employee.dto";
+import { GradeGuard } from "../common/guards/grade.guard";
+import { RequiredGrade } from "../common/decorators/required-grade.decorator";
 
 @ApiTags("employees")
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, GradeGuard)
 @Controller("employees")
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
@@ -51,6 +53,7 @@ export class EmployeesController {
   }
 
   @Get()
+  @RequiredGrade(3)
   @ApiOperation({ summary: "직원 목록 조회" })
   @ApiResponse({
     status: 200,
@@ -191,5 +194,11 @@ export class EmployeesController {
   })
   async remove(@Param("id") id: string) {
     return this.employeesService.remove(id);
+  }
+
+  @RequiredGrade(2)
+  @Get("protected-route")
+  protectedEndpoint() {
+    // ... 엔드포인트 로직 ...
   }
 }
