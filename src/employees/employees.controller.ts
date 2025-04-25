@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Put,
+  Patch,
   Param,
   Delete,
   UseGuards,
@@ -123,45 +123,18 @@ export class EmployeesController {
     return this.employeesService.findOne(id);
   }
 
-  @Put(":id")
+  @Patch(":id")
+  @RequiredGrade(2)
   @ApiOperation({ summary: "직원 정보 수정" })
   @ApiResponse({
     status: 200,
-    description: "직원 정보 수정 성공",
-    schema: {
-      example: {
-        statusCode: 200,
-        message: "Success",
-        data: {
-          id: "1",
-          name: "홍길동",
-          age: 31,
-          salary: 55000000,
-          hireDate: "2024-04-24T00:00:00.000Z",
-          address: "서울시 강남구",
-          emergencyContact: "010-1234-5678",
-          remainingLeave: 15,
-          createdAt: "2024-04-24T00:00:00.000Z",
-          updatedAt: "2024-04-24T00:00:00.000Z",
-        },
-      },
-    },
-  })
-  @ApiResponse({
-    status: 404,
-    description: "직원을 찾을 수 없음",
-    schema: {
-      example: {
-        statusCode: 404,
-        message: "해당 ID의 직원을 찾을 수 없습니다.",
-        data: null,
-      },
-    },
+    description: "직원 정보가 성공적으로 수정되었습니다.",
+    type: Employee,
   })
   async update(
     @Param("id") id: string,
     @Body() updateEmployeeDto: UpdateEmployeeDto
-  ) {
+  ): Promise<Employee> {
     return this.employeesService.update(id, updateEmployeeDto);
   }
 

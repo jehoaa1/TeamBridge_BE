@@ -6,62 +6,68 @@ import {
   IsOptional,
   Min,
   MaxLength,
+  IsMongoId,
 } from "class-validator";
 import { Type } from "class-transformer";
 
 export class UpdateEmployeeDto {
-  @ApiPropertyOptional({ description: "직원 이름" })
+  @ApiPropertyOptional({ example: "홍길동", description: "직원 이름" })
   @IsString()
-  @MaxLength(50)
-  name: string;
-
-  @ApiPropertyOptional({ description: "나이" })
-  @IsNumber()
-  @Min(1)
   @IsOptional()
+  @MaxLength(50)
+  name?: string;
+
+  @ApiPropertyOptional({ example: 30, description: "나이" })
+  @IsNumber()
+  @IsOptional()
+  @Min(1)
   age?: number;
 
-  @ApiPropertyOptional({ description: "연봉" })
+  @ApiPropertyOptional({ example: 50000000, description: "연봉" })
   @IsNumber()
-  @Min(0)
   @IsOptional()
+  @Min(0)
   salary?: number;
 
-  @ApiPropertyOptional({ description: "입사일" })
-  @Type(() => Date)
+  @ApiPropertyOptional({ example: "2024-01-01", description: "입사일" })
   @IsDate()
-  hireDate: Date;
+  @Type(() => Date)
+  @IsOptional()
+  hireDate?: Date;
 
   @ApiPropertyOptional({ description: "퇴사일" })
+  @IsOptional()
   @Type(() => Date)
   @IsDate()
-  @IsOptional()
   resignDate?: Date;
 
-  @ApiPropertyOptional({ description: "비상연락처" })
+  @ApiPropertyOptional({ example: "010-1234-5678", description: "비상 연락처" })
   @IsString()
   @IsOptional()
   emergencyContact?: string;
 
-  @ApiPropertyOptional({ description: "집주소" })
+  @ApiPropertyOptional({ example: "서울시 강남구", description: "주소" })
   @IsString()
   @IsOptional()
   address?: string;
 
   @ApiPropertyOptional({ description: "남은 연차" })
   @IsNumber()
-  @Min(0)
   @IsOptional()
+  @Min(0)
   remainingLeave?: number;
 
   @ApiPropertyOptional({ description: "기타 정보" })
+  @IsOptional()
   @IsString()
   @MaxLength(500)
-  @IsOptional()
   memo?: string;
 
-  @ApiPropertyOptional({ description: "팀 ID" })
-  @IsString()
+  @ApiPropertyOptional({
+    example: "507f1f77bcf86cd799439011",
+    description: "소속 팀 ID",
+  })
+  @IsMongoId()
   @IsOptional()
-  teamId: string;
+  teamId?: string;
 }

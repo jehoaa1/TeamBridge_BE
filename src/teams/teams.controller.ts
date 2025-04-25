@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Put,
+  Patch,
   Param,
   Delete,
   UseGuards,
@@ -16,6 +16,7 @@ import {
 } from "@nestjs/swagger";
 import { TeamsService } from "./teams.service";
 import { CreateTeamDto } from "./dto/create-team.dto";
+import { UpdateTeamDto } from "./dto/update-team.dto";
 import { Team } from "./schemas/team.schema";
 import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
 import { GradeGuard } from "../common/guards/grade.guard";
@@ -52,7 +53,7 @@ export class TeamsController {
     return this.teamsService.findAll();
   }
 
-  @Put(":id")
+  @Patch(":id")
   @RequiredGrade(2)
   @ApiOperation({ summary: "팀 정보 수정" })
   @ApiResponse({
@@ -62,7 +63,7 @@ export class TeamsController {
   })
   async update(
     @Param("id") id: string,
-    @Body() updateTeamDto: CreateTeamDto
+    @Body() updateTeamDto: UpdateTeamDto
   ): Promise<Team> {
     return this.teamsService.update(id, updateTeamDto);
   }
