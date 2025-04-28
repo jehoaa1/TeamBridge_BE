@@ -168,10 +168,4 @@ export class EmployeesController {
   async remove(@Param("id") id: string) {
     return this.employeesService.remove(id);
   }
-
-  @RequiredGrade(2)
-  @Get("protected-route")
-  protectedEndpoint() {
-    // ... 엔드포인트 로직 ...
-  }
 }

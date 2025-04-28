@@ -13,6 +13,10 @@ export class UsersService {
     return createdUser.save();
   }
 
+  async getUserList(): Promise<User[] | null> {
+    return await this.userModel.find().exec();
+  }
+
   async findByEmail(email: string): Promise<User | null> {
     return this.userModel.findOne({ email }).exec();
   }

@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, OmitType } from "@nestjs/swagger";
 
 export class UserResponseDto {
   @ApiProperty({ example: "507f1f77bcf86cd799439011" })
@@ -26,3 +26,7 @@ export class LoginResponseDto {
 }
 
 export class RegisterResponseDto extends UserResponseDto {}
+
+export class ListResponseDto extends OmitType(UserResponseDto, [
+  "id",
+] as const) {}

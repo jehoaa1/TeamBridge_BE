@@ -2,7 +2,11 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
-import { LoginResponseDto, RegisterResponseDto } from "./dto/auth-response.dto";
+import {
+  ListResponseDto,
+  LoginResponseDto,
+  RegisterResponseDto,
+} from "./dto/auth-response.dto";
 import { UsersService } from "../users/users.service";
 import * as bcrypt from "bcrypt";
 
@@ -45,6 +49,17 @@ export class AuthService {
         createdAt: user.createdAt,
       },
     };
+  }
+
+  async getUserList(): Promise<ListResponseDto[]> {
+    const user = await this.usersService.getUserList();
+
+    return user.map((user) => ({
+      email: user.email,
+      name: user.name,
+      grade: user.grade,
+      createdAt: user.createdAt,
+    }));
   }
 
   async register(registerDto: RegisterDto): Promise<RegisterResponseDto> {
