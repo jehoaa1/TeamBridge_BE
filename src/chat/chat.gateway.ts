@@ -44,6 +44,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // 방에 참여
     await client.join(roomId);
 
+    // 입장한 클라이언트에게는 'join' 응답 보내기 (⭐ 이게 필요함)
+    client.emit("join", {
+      roomId,
+      clientId: client.id,
+      clients,
+    });
+
     // 방에 있는 모든 클라이언트에게 새로운 참여자 알림
     this.server.to(roomId).emit("userJoined", {
       roomId,
@@ -52,7 +59,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     });
 
     // 방에 두 명이 있으면 ready 이벤트 발생
-    if (clients.length === 2) {
+    if (clients.length >= 2) {
       this.server.to(roomId).emit("ready", {
         roomId,
         clients,
@@ -60,6 +67,27 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     return { event: "join", roomId, clients: clients };
+  }
+
+  @SubscribeMessage("message")
+  async handleMessage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody()
+    data: {
+      roomId: string;
+      senderId: string;
+      message: string;
+      timestamp: number;
+    }
+  ) {
+    const { roomId, senderId, message, timestamp } = data;
+
+    // 해당 방(roomId)으로 메시지 브로드캐스팅
+    this.server.to(roomId).emit("message", {
+      senderId,
+      message,
+      timestamp,
+    });
   }
 
   @SubscribeMessage("offer")
