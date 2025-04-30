@@ -26,13 +26,27 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`Client disconnected: ${client.id}`);
   }
 
+  // @SubscribeMessage("join")
+  // async handleJoin(
+  //   @ConnectedSocket() client: Socket,
+  //   @MessageBody() data: { roomId: string }
+  // ) {
+  //   const { roomId } = data;
+  //   client.join(roomId);
+  // }
+
   @SubscribeMessage("join")
-  async handleJoin(
+  handleJoin(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: { roomId: string }
   ) {
-    const { roomId } = data;
-    client.join(roomId);
+    console.log("join-data.roomId::", data.roomId);
+    client.join(data.roomId);
+    const clients = Array.from(
+      this.server.sockets.adapter.rooms.get(data.roomId) || []
+    );
+    client.emit("joined", { clients }); // 참여 중인 클라이언트 목록 전송
+    client.to(data.roomId).emit("userJoined", { newClientId: client.id });
   }
 
   @SubscribeMessage("offer")

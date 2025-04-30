@@ -65,6 +65,12 @@ export class AuthService {
   async register(registerDto: RegisterDto): Promise<RegisterResponseDto> {
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
 
+    const userchk = await this.usersService.findByEmail(registerDto.email);
+
+    if (userchk) {
+      throw new UnauthorizedException("가입 된 이메일입니다.");
+    }
+
     const user = await this.usersService.create({
       ...registerDto,
       password: hashedPassword,
